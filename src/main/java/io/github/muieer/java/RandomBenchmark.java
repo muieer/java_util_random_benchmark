@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomBenchmark {
 
     private static final Random RANDOM = new Random();
+    private static final ThreadLocal<Random> MY_THREAD_LOCAL_RANDOM = ThreadLocal.withInitial(Random::new);
 
     @Benchmark
     public static void measureRandom() {
@@ -21,6 +22,11 @@ public class RandomBenchmark {
     @Benchmark
     public static void measureThreadLocalRandom() {
         ThreadLocalRandom.current().nextInt(1_000_000);
+    }
+
+    @Benchmark
+    public static void measureMyThreadLocalRandom() {
+        MY_THREAD_LOCAL_RANDOM.get().nextInt(1_000_000);
     }
 
     public static void main(String[] args) throws RunnerException {
